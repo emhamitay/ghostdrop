@@ -64,11 +64,14 @@ export function useDrag({ id, type = "default", data }: UseDragOptions) {
 }
 
 // Prevents drag from starting when the pointer is on an interactive descendant.
+// Exception: if the closest interactive element has data-drag-ignore, treat it as
+// non-interactive so that invisible full-card link overlays don't block dragging.
 function isInteractive(element: Element | null): boolean {
   if (!element) return false;
-  return (
-    element.closest(
-      "button, [role=button], [tabindex]:not([tabindex='-1']), input, select, textarea, a[href], summary, label"
-    ) !== null
+  const interactive = element.closest(
+    "button, [role=button], [tabindex]:not([tabindex='-1']), input, select, textarea, a[href], summary, label"
   );
+  if (!interactive) return false;
+  if (interactive.hasAttribute("data-drag-ignore")) return false;
+  return true;
 }

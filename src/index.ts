@@ -1,3 +1,5 @@
+'use client';
+
 // Context & Provider
 export { DndProvider } from "./context/DndProvider";
 
